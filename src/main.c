@@ -1,5 +1,6 @@
-//filename:main.c
-//author:PenG
+//filename : main.c
+//author : PenG
+//update time : 2019/07/24
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,16 +11,15 @@
 
 #include "output.h"
 
-//定义地图的宽和高
-#define WIDTH 26
-#define HEIGHT 20
+#define WIDTH 26    //地图的宽度
+#define HEIGHT 20    //地图的高度
 
 //定义四个方向控制键和一个暂停键
-#define KEY_UP '8'
-#define KEY_DOWN '2'
-#define KEY_LEFT '4'
-#define KEY_RIGHT '6'
-#define KEY_SUSPEND '5'
+#define KEY_UP '8'    //向上键
+#define KEY_DOWN '2'    //向下键
+#define KEY_LEFT '4'    //向左键
+#define KEY_RIGHT '6'    //向右键
+#define KEY_SUSPEND '5'    //暂停键
 
 //定义墙，蛇，食物和背景的颜色
 #define FOOD_COLOR 0x0060
@@ -59,19 +59,6 @@ snake *tail, *body, *head, *food;
 int snake_length = 3;  //蛇的长度，初始化为3
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 //启动游戏
 void start(void);
 
@@ -106,8 +93,7 @@ bool biteSelf(void);
 //释放蛇的内存
 void freeSnake(void);
 
-//画墙
-//新版中一次游戏只需要画一次墙
+//画墙，一次游戏只需要画一次墙
 void printWall(void);
 
 //画蛇
@@ -117,21 +103,10 @@ void printSnake(void);
 void printFood(void);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 int main(void)
 {
 	initOutput();
+
 	start();
 
 	return 0;
@@ -162,15 +137,14 @@ void start(void)
 		}
 		else
 		{
-
 			//在这里控制蛇的走向
 			moveSnake(tempD);
-
 		}
 
 		//撞到墙或者咬到自己就重新开始
 		if (knockWall() || biteSelf())
 		{
+			//提示游戏已经结束
 			cleanInput();
 			Sleep(1);
 			setPos(0, map.endY + 1);
@@ -179,11 +153,13 @@ void start(void)
 			printf("\nPress any key to play again...");
 			_getch();
 
+			//清除屏幕上的画面
 			system("cls");
 			cleanSnake();
 			freeSnake();
 			free(food);
 
+			//重新初始化蛇，重新开始游戏
 			initSnake();
 			printSnake();
 			printFood();
@@ -260,6 +236,16 @@ void printSnake(void)
 	}  //while  end
 }
 
+//判断该点是否已经避开墙的位置，避开返回真
+bool avoidWall(int x, int y)
+{
+	if (x == 0 || y == 0 || x == map.endX || y == map.endY)
+	{
+		return false;
+	}
+	return true;
+}
+
 //记录并打印一个食物
 void printFood(void)
 {
@@ -272,8 +258,7 @@ void printFood(void)
 	{
 		tx = (rand() % (WIDTH - 2)) + 1;
 		ty = (rand() % (HEIGHT - 2)) + 1;
-	} while (!avoidSnake(tx, ty)	//避开蛇
-				|| tx == 0 || ty == 0 || tx == map.endX || ty == map.endY);	//避开墙
+	} while (!avoidSnake(tx, ty) && !avoidWall(tx, ty))	//避开蛇和墙
 
 	food->x = tx;
 	food->y = ty;
@@ -452,7 +437,7 @@ void moveSnake(enum D direction)
 		body = body->last;
 	}  //while  end
 	//重复利用空间，别浪费了！
-	//下面这几行顺序不能变
+	//下面这四行顺序不能变
 	head->last = tail;
 	tail = tail->last;
 	head = head->last;

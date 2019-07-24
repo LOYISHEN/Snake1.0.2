@@ -1,7 +1,11 @@
+//filename : output.c
+//author : PenG
+//update time : 2019/07/24
+
 #include "output.h"
 
-HANDLE hOut;
-COORD pos = { 0,0 };
+HANDLE hOut;    //用于输出的句柄
+COORD pos = { 0,0 };    //输出的位置
 CONSOLE_CURSOR_INFO cci;    //定义结构体
 
 //初始化输出设置
