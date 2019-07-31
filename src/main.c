@@ -258,7 +258,7 @@ void printFood(void)
 	{
 		tx = (rand() % (WIDTH - 2)) + 1;
 		ty = (rand() % (HEIGHT - 2)) + 1;
-	} while (!avoidSnake(tx, ty) && !avoidWall(tx, ty))	//避开蛇和墙
+	} while (!avoidSnake(tx, ty) && !avoidWall(tx, ty));	//避开蛇和墙
 
 	food->x = tx;
 	food->y = ty;
