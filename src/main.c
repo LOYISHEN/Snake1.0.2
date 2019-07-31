@@ -127,6 +127,7 @@ void start(void)
 		{
 			snake_length++;
 
+			//当已经吃满了整个地图之后就退出
 			if (snake_length >= size)
 			{
 				printSnake();
@@ -428,14 +429,20 @@ void moveSnake(enum D direction)
 
 	//尾推法移动蛇
 	body = tail;	//下面要用到tail
-	//把蛇尾涂黑
-	printPix(tail->x, tail->y, BG_COLOR);
-	//把蛇头涂成蛇身颜色
+
+	//把蛇尾涂黑 需要判断食物是不是在尾部，在尾部就不涂黑。这里解决的是蛇的移动的滞后问题
+	if (!(food->x == tail->x && food->y == tail->y))
+	{
+		printPix(tail->x, tail->y, BG_COLOR);
+	}
+
+	//移动到蛇头，把蛇头涂成蛇身颜色
 	printPix(head->x, head->y, SNAKE_BODY_COLOR);
 	while (body->last != NULL)
 	{
 		body = body->last;
 	}  //while  end
+
 	//重复利用空间，别浪费了！
 	//下面这四行顺序不能变
 	head->last = tail;
